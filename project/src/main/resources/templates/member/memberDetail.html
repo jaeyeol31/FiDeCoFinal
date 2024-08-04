@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원 상세보기</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="navbar.html"></div>
+	<h2>회원 상세보기</h2>
+	<table>
+		<tr>
+			<th>ID</th>
+			<td><span th:text="${member.id}"></span></td>
+		</tr>
+		<tr>
+			<th>아이디</th>
+			<td><span th:text="${member.memberId}"></span></td>
+		</tr>
+		<tr>
+			<th>이름</th>
+			<td><span th:text="${member.memberName}"></span></td>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<td><span th:text="${member.memberPw}"></span></td>
+		</tr>
+		<tr>
+			<th>주소</th>
+			<td><span th:text="${member.memberAddress}"></span></td>
+		</tr>
+		<tr>
+			<th>전화번호</th>
+			<td><span th:text="${member.memberPhone}"></span></td>
+		</tr>
+		<tr>
+			<th>이메일</th>
+			<td><span th:text="${member.memberEmail}"></span></td>
+		</tr>
+		<tr>
+			<th>권한</th>
+			<td><span th:text="${member.memberAuth}"></span></td>
+		</tr>
+	</table>
+	<div style="text-align: center;">
+		<a th:href="@{/member/update/{id}(id=${member.id})}">수정</a> 
+		<a th:href="@{/member/delete/{id}(id=${member.id})}">삭제</a>
+		<a th:href="@{/member/memberList}">목록으로</a>
+	</div>
+</body>
+</html>

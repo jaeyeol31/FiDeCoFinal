@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: fidecoproject
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+server:
+  port: 8088
+  address: 127.0.0.1
+  servlet:
+    context-path: /
+logging:
+  config: classpath:log4j2.properties

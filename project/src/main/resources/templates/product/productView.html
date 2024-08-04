@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>제품 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #filterForm {
+            width: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <!-- fragment 정의 -->
+    <div th:fragment="productList">
+        <div class="container mt-4">
+            <h2>제품 목록</h2>
+            <!-- 조건부로 필터링 폼 표시 -->
+            <div th:if="${showFilter}">
+                <form id="filterForm" class="form-inline mb-3">
+                    <label for="productCategory" class="mr-2">카테고리 필터:</label>
+                    <select id="productCategory" class="form-control mr-2" onchange="applyFilter()">
+                        <option value="">전체</option>
+                        <option value="1">사무용 / 가정용</option>
+                        <option value="2">고성능 / 전문가용</option>
+                        <option value="3">3D게임 / 그래픽용</option>
+                    </select>
+
+                    <label for="priceSort" class="mr-2">가격 정렬:</label>
+                    <select id="priceSort" class="form-control mr-2" onchange="applyFilter()">
+                        <option value="">선택</option>
+                        <option value="asc">오름차순</option>
+                        <option value="desc">내림차순</option>
+                    </select>
+
+                    <label for="dateSort" class="mr-2">날짜 정렬:</label>
+                    <select id="dateSort" class="form-control mr-2" onchange="applyFilter()">
+                        <option value="">선택</option>
+                        <option value="asc">오름차순</option>
+                        <option value="desc">내림차순</option>
+                    </select>
+
+                    <label for="searchInput" class="mr-2">상품명 검색:</label>
+                    <input type="text" id="searchInput" class="form-control" onkeyup="applyFilter()" placeholder="검색어 입력">
+                </form>
+                <br>
+            </div>
+            <div class="row" id="productContainer">
+                <div class="col-md-3 mb-4" th:each="product : ${products}" 
+                     th:data-category="${product.productCategory}"
+                     th:data-price="${product.productPrice}"
+                     th:data-date="${product.productRegisdate}">
+                    <div class="card">
+                        <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="card-img-top product-image" alt="제품 이미지">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${product.productName}">제품명</h5>
+                            <p class="card-text text-danger" th:text="'₩' + ${product.productPrice}">가격</p>
+                            <input type="checkbox" name="compare" class="compare-checkbox" th:value="${product.productId}"> 비교
+                            <a th:href="@{/products/productOrder/{id}(id=${product.productId})}" class="btn btn-primary">상세보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success mt-3" onclick="compareSelectedProducts()">선택한 상품 비교</button>
+        </div>
+    </div>
+    <script src="/js/filter.js"></script>
+    <script src="/js/compareProducts.js"></script> 
+</body>
+</html>

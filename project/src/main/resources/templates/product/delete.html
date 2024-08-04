@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+	<title>제품 삭제</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="navbar.html"></div>
+	<h2>제품 삭제</h2>
+	<p>정말로 이 제품을 삭제하시겠습니까?</p>
+	<table border="1">
+		<tr>
+			<th>제품 ID</th>
+			<td th:text="${product.productId}"></td>
+		</tr>
+		<tr>
+			<th>제품명</th>
+			<td th:text="${product.productName}"></td>
+		</tr>
+		<tr>
+			<th>가격</th>
+			<td th:text="${product.productPrice}"></td>
+		</tr>
+		<tr>
+			<th>등록일</th>
+			<td th:text="${product.productRegisdate}"></td>
+		</tr>
+		<tr>
+			<th>제품 소개</th>
+			<td th:text="${product.productIntro}"></td>
+		</tr>
+		<tr>
+			<th>제품 카테고리</th>
+			<td th:text="${product.productCategory}"></td>
+		</tr>
+	</table>
+	<br>
+	<form th:action="@{/products/delete/{id}(id=${product.productId})}"
+		method="post">
+		<button type="submit">삭제</button>
+	</form>
+	<br>
+	<a th:href="@{/products/MemberList}">취소</a>
+</body>
+</html>

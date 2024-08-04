@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 비교</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .product-cell {
+            width: 50%;
+            vertical-align: top;
+        }
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+        .empty-cell {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="container mt-4">
+        <h2>상품 비교</h2>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr th:if="${products.size() >= 1}">
+                            <td class="product-cell" th:each="product, iterStat : ${products}" th:if="${iterStat.index == 0}">
+                                <div>
+                                    <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="img-fluid" alt="제품 이미지">
+                                    <table class="table">
+                                        <tr><th>제품명</th><td th:text="${product.productName}">제품명</td></tr>
+                                        <tr><th>가격</th><td th:text="${'₩' + product.productPrice}">가격</td></tr>
+                                        <tr><th>제품 소개</th><td th:text="${product.productIntro}">제품 소개</td></tr>
+                                        <tr><th>제품 카테고리</th><td class="product-category" th:text="${product.productCategory}">제품 카테고리</td></tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="product-cell empty-cell" th:if="${products.size() == 1}"></td>
+                            <td class="product-cell" th:each="product, iterStat : ${products}" th:if="${iterStat.index == 1}">
+                                <div>
+                                    <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="img-fluid" alt="제품 이미지">
+                                    <table class="table">
+                                        <tr><th>제품명</th><td th:text="${product.productName}">제품명</td></tr>
+                                        <tr><th>가격</th><td th:text="${'₩' + product.productPrice}">가격</td></tr>
+                                        <tr><th>제품 소개</th><td th:text="${product.productIntro}">제품 소개</td></tr>
+                                        <tr><th>제품 카테고리</th><td class="product-category" th:text="${product.productCategory}">제품 카테고리</td></tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="product-cell empty-cell" th:if="${products.size() < 2}"></td>
+                        </tr>
+                        <tr th:if="${products.size() > 2}">
+                            <td class="product-cell" th:each="product, iterStat : ${products}" th:if="${iterStat.index == 2}">
+                                <div>
+                                    <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="img-fluid" alt="제품 이미지">
+                                    <table class="table">
+                                        <tr><th>제품명</th><td th:text="${product.productName}">제품명</td></tr>
+                                        <tr><th>가격</th><td th:text="${'₩' + product.productPrice}">가격</td></tr>
+                                        <tr><th>제품 소개</th><td th:text="${product.productIntro}">제품 소개</td></tr>
+                                        <tr><th>제품 카테고리</th><td class="product-category" th:text="${product.productCategory}">제품 카테고리</td></tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="product-cell empty-cell" th:if="${products.size() == 3}"></td>
+                            <td class="product-cell" th:each="product, iterStat : ${products}" th:if="${iterStat.index == 3}">
+                                <div>
+                                    <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="img-fluid" alt="제품 이미지">
+                                    <table class="table">
+                                        <tr><th>제품명</th><td th:text="${product.productName}">제품명</td></tr>
+                                        <tr><th>가격</th><td th:text="${'₩' + product.productPrice}">가격</td></tr>
+                                        <tr><th>제품 소개</th><td th:text="${product.productIntro}">제품 소개</td></tr>
+                                        <tr><th>제품 카테고리</th><td class="product-category" th:text="${product.productCategory}">제품 카테고리</td></tr>
+                                    </table>
+                                </div>
+                            </td>
+                            <td class="product-cell empty-cell" th:if="${products.size() < 4}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a th:href="@{/products/productView}" class="btn btn-primary">상품 목록으로 돌아가기</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const categoryCells = document.querySelectorAll(".product-category");
+            categoryCells.forEach(cell => {
+                const category = cell.textContent.trim();
+                let categoryText = "";
+                switch (category) {
+                    case "1":
+                        categoryText = "사무용 / 가정용";
+                        break;
+                    case "2":
+                        categoryText = "고성능 / 전문가용";
+                        break;
+                    case "3":
+                        categoryText = "3D게임 / 그래픽용";
+                        break;
+                }
+                cell.textContent = categoryText;
+            });
+        });
+    </script>
+</body>
+</html>

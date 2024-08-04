@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <h2>마이페이지</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td><span th:text="${member.id}"></span></td>
+        </tr>
+        <tr>
+            <th>아이디</th>
+            <td><span th:text="${member.memberId}"></span></td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td><span th:text="${member.memberName}"></span></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td><span th:text="${member.memberAddress}"></span></td>
+        </tr>
+        <tr>
+            <th>전화번호</th>
+            <td><span th:text="${member.memberPhone}"></span></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td><span th:text="${member.memberEmail}"></span></td>
+        </tr>
+    </table>
+    <div style="text-align: center;">
+        <a class="btn btn-primary" th:href="@{/member/update/{id}(id=${member.id})}">수정</a> 
+        <a class="btn btn-danger" th:href="@{/member/delete/{id}(id=${member.id})}">회원탈퇴</a>
+        <a class="btn btn-info" th:href="@{/cart/{memberId}(memberId=${member.id})}">장바구니</a>
+        <a class="btn btn-info" th:href="@{/orders/member/{memberId}(memberId=${member.id})}">주문 목록 보기</a>
+    </div>
+</body>
+</html>

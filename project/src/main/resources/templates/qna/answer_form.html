@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>답변 수정</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        /* 커스텀 스타일 */
+        .container {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Bootstrap의 primary 색상 */
+            border-color: #007bff; /* Bootstrap의 primary 색상 */
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3; /* Hover 시 어두운 primary 색상 */
+            border-color: #004085; /* Hover 시 어두운 primary 색상 */
+        }
+        
+        .form-label {
+            font-weight: bold;
+        }
+        footer{
+        	margin-top: 120px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+		<div th:insert="~{navbar.html}"></div>
+	</header>
+    <div class="container">
+        <h5 class="my-3 border-bottom pb-2">답변 수정</h5>
+        <form th:object="${answerForm}" method="post">
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+            </div>
+            <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        </form>
+    </div>
+    <footer class="bg-dark text-light py-3">
+        <div class="text-center">
+            <p>(주)FiDeCo</p>
+            <p>주소 서울특별시 구로구 182-13 대룡포스트 2차 2층</p>
+            <p>사업자 번호 123-23-345</p>
+            <p>Copyright © fideco Co, Ltd. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

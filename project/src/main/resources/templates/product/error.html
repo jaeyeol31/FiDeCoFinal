@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>오류</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="navbar.html"></div>
+    <h2>오류</h2>
+    <p>이런! 문제가 발생했습니다.</p>
+    <a th:href="@{/products/memberList}">제품 목록으로 돌아가기</a>
+</body>
+</html>

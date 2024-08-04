@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>네비게이션 바 스타일 적용</title>
+<!-- 부트스트랩 CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- 공통 CSS -->
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<!-- 네비게이션 바 -->
+	<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+		<div class="container">
+			<a class="navbar-brand" href="/"> <img src="img/FiDECO.jpg"
+				alt="FIDECO" style="width: 100px; height: auto;">
+			</a>
+			<div class="reco">컴퓨터 추천사이트 FIDECO</div>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto" id="nav-items">
+                    <li class="nav-item" id="signupItem">
+                        <a class="nav-link" href="/member/signup">회원 가입</a>
+                    </li>
+                    <li class="nav-item" id="memberListItem" style="display: none;">
+                        <a class="nav-link" href="/member/memberList">회원 목록</a>
+                    </li>
+                    <li class="nav-item" id="productSaveItem" style="display: none;">
+                        <a class="nav-link" href="/products/save">상품 등록</a>
+                    </li>
+                    <li class="nav-item" id="productListItem">
+                        <a class="nav-link" href="/products/productList">상품 목록</a>
+                    </li>
+                    <li class="nav-item" id="cartItem">
+                        <a class="nav-link" href="#" id="cartLink">장바구니</a>
+                    </li>
+                    <li class="nav-item" id="noticeSelectItem">
+                        <a class="nav-link" href="/NoticeSelect">게시판</a>
+                    </li>
+                    <li class="nav-item" id="myPage" style="display: none;">
+                        <a class="nav-link" href="#">마이페이지</a>
+                    </li>
+                    <li class="nav-item" id="adminItem" style="display: none;">
+                        <a class="nav-link" href="/admin">관리자페이지</a>
+                    </li>
+                    <li class="nav-item" id="loginItem">
+                        <a class="nav-link" href="/log-in">로그인</a>
+                    </li>
+                    <li class="nav-item" id="logoutItem" style="display: none;">
+                        <a class="nav-link" href="#" id="logoutBtn">로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+	</nav>
+
+	<!-- 부트스트랩 JavaScript 파일들 -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+	<script	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="/js/navbar.js"></script>
+	<!-- JavaScript 파일 경로 설정 -->
+</body>
+</html>
