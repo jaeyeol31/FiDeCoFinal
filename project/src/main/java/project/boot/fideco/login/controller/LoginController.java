@@ -145,25 +145,6 @@ public class LoginController {
         return "redirect:/index";
     }
 
-//    @GetMapping("/login/oauth2/code/naver")
-//    public String loginNaver(OAuth2AuthenticationToken authentication) {
-//        OAuth2User oAuth2User = authentication.getPrincipal();
-//        String naverId = (String) ((Map<String, Object>) oAuth2User.getAttribute("response")).get("id");
-//        String email = (String) ((Map<String, Object>) oAuth2User.getAttribute("response")).get("email");
-//        String phone = (String) ((Map<String, Object>) oAuth2User.getAttribute("response")).get("mobile");
-//
-//        Optional<MemberEntity> existingMember = memberRepository.findByMemberEmail(email);
-//        if (existingMember.isPresent()) {
-//            return "redirect:/";
-//        } else {
-//            String redirectUrl = UriComponentsBuilder.fromPath("/member/additional-info")
-//                    .queryParam("memberId", "naver_" + naverId)
-//                    .queryParam("memberEmail", email)
-//                    .queryParam("memberPhone", phone)
-//                    .toUriString();
-//            return "redirect:" + redirectUrl;
-//        }
-//    }
     @GetMapping("/login/oauth2/code/naver")
     public String loginNaver(OAuth2AuthenticationToken authentication, HttpServletResponse response) {
         OAuth2User oAuth2User = authentication.getPrincipal();
@@ -186,7 +167,7 @@ public class LoginController {
             
             return "redirect:/";
         } else {
-            String redirectUrl = UriComponentsBuilder.fromPath("/member/additional-info")
+            String redirectUrl = UriComponentsBuilder.fromPath("/member/update")
                     .queryParam("memberId", "naver_" + naverId)
                     .queryParam("memberEmail", email)
                     .queryParam("memberPhone", phone)
@@ -194,36 +175,4 @@ public class LoginController {
             return "redirect:" + redirectUrl;
         }
     }
-
-
-    @GetMapping("/member/additional-info")
-    public String showAdditionalInfoForm(@RequestParam("memberId") String memberId,
-                                         @RequestParam("memberEmail") String memberEmail,
-                                         @RequestParam("memberPhone") String memberPhone,
-                                         Model model) {
-        SignUpRequestDTO signUpRequestDTO = new SignUpRequestDTO();
-        signUpRequestDTO.setMemberId(memberId);
-        signUpRequestDTO.setMemberEmail(memberEmail);
-        signUpRequestDTO.setMemberPhone(memberPhone);
-        model.addAttribute("member", signUpRequestDTO);
-        return "member/additional-info";
-    }
-
-//    @PostMapping("/member/additional-info")
-//    public ResponseEntity<?> handleAdditionalInfo(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
-//        try {
-//            Optional<MemberEntity> memberOptional = memberRepository.findByMemberId(signUpRequestDTO.getMemberId());
-//            if (memberOptional.isPresent()) {
-//                MemberEntity member = memberOptional.get();
-//                member.setMemberName(signUpRequestDTO.getMemberName());
-//                member.setMemberAddress(signUpRequestDTO.getMemberAddress());
-//                memberService.updateMember(member);
-//                return ResponseEntity.ok(Collections.singletonMap("code", "SU"));
-//            } else {
-//                return ResponseEntity.status(404).body(Collections.singletonMap("code", "NF")); // Not Found
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body(Collections.singletonMap("code", "FA"));
-//        }
-//    }
 }

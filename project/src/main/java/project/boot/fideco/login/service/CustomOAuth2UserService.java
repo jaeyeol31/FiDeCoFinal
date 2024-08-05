@@ -34,51 +34,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Autowired
     private MemberRepository memberRepository;
 
-//    @Override
-//    public OAuth2User loadUser(OAuth2UserRequest userRequest) {
-//        OAuth2User oAuth2User = super.loadUser(userRequest);
-//        
-//        Map<String, Object> attributes = (Map<String, Object>) oAuth2User.getAttributes().get("response");
-//        String naverId = (String) attributes.get("id");
-//        String email = (String) attributes.get("email");
-//        String phone = (String) attributes.get("mobile");
-//
-//        MemberEntity member = memberRepository.findByMemberEmail(email).orElse(null);
-//
-//        if (member == null) {
-//            // 회원가입을 위한 임시 저장
-//            member = new MemberEntity();
-//            member.setMemberId("naver_" + naverId);
-//            member.setMemberEmail(email);
-//            member.setMemberPhone(phone);
-//            member.setMemberAuth("ROLE_USER");
-//            member.setMemberType("naver");
-//
-//            memberRepository.save(member);
-//
-//            // 추가 정보 입력 페이지로 리다이렉트
-//            String redirectUrl = UriComponentsBuilder.fromPath("/member/additional-info")
-//                    .queryParam("memberId", member.getMemberId())
-//                    .queryParam("memberEmail", member.getMemberEmail())
-//                    .queryParam("memberPhone", member.getMemberPhone())
-//                    .toUriString();
-//            try {
-//                httpServletResponse.sendRedirect(redirectUrl);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return oAuth2User;
-//        }
-//
-//        String jwtToken = jwtProvider.create(member.getId(), member.getMemberId(), member.getMemberAuth());
-//        Cookie cookie = new Cookie("jwtToken", jwtToken);
-//        cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
-//        cookie.setPath("/");
-//        httpServletResponse.addCookie(cookie);
-//
-//        return oAuth2User;
-//    }
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -103,7 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, Collections.singletonList(new SimpleGrantedAuthority(member.getMemberAuth())));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String redirectUrl = UriComponentsBuilder.fromPath("/member/additional-info")
+            String redirectUrl = UriComponentsBuilder.fromPath("/member/update")
                     .queryParam("memberId", member.getMemberId())
                     .queryParam("memberEmail", member.getMemberEmail())
                     .queryParam("memberPhone", member.getMemberPhone())

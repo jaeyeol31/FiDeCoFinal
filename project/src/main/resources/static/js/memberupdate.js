@@ -1,24 +1,50 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("additionalInfoForm");
-    const memberName = document.getElementById("memberName");
+    const updateForm = document.getElementById("updateForm");
+    const memberPw = document.getElementById("memberPw");
+    const confirmMemberPw = document.getElementById("confirmMemberPw");
     const detailAddress = document.getElementById("sample4_detailAddress");
-    const nameMessage = document.getElementById("nameMessage");
+    const phoneCategory = document.getElementById("memberPhoneCategory");
+    const phoneMiddle = document.getElementById("memberPhoneMiddle");
+    const phoneLast = document.getElementById("memberPhoneLast");
+    const updateButton = document.getElementById("updateButton");
+    const memberName = document.getElementById("memberName");
+
+    const pwMessage = document.getElementById("pwMessage");
+    const confirmPwMessage = document.getElementById("confirmPwMessage");
     const detailAddressMessage = document.getElementById("detailAddressMessage");
-    const submitButton = document.getElementById("submitButton");
+    const phoneMessage = document.getElementById("phoneMessage");
+    const nameMessage = document.getElementById("nameMessage");
 
-    let isNameValid = false;
-    let isDetailAddressValid = false;
+    let isPasswordValid = true;
+    let isPasswordMatch = true;
+    let isDetailAddressValid = true;
+    let isPhoneNumberValid = true;
+    let isNameValid = true;
 
-    const validateName = () => {
-        const nameRegex = /^[가-힣]{2,}$/;
-        if (!nameRegex.test(memberName.value)) {
-            nameMessage.textContent = "이름은 한글로 2자 이상이어야 합니다.";
-            isNameValid = false;
+    const validatePassword = () => {
+        const password = memberPw.value;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+
+        if (!password) {
+            pwMessage.textContent = "비밀번호를 입력해주세요.";
+            isPasswordValid = false;
+        } else if (!passwordRegex.test(password)) {
+            pwMessage.textContent = "비밀번호는 숫자, 영문, 특수문자를 포함하여 8자 이상이어야 합니다.";
+            isPasswordValid = false;
         } else {
-            nameMessage.textContent = "";
-            isNameValid = true;
+            pwMessage.textContent = "";
+            isPasswordValid = true;
         }
-        toggleSubmitButton();
+    };
+
+    const validateConfirmPassword = () => {
+        if (memberPw.value !== confirmMemberPw.value) {
+            confirmPwMessage.textContent = "비밀번호가 일치하지 않습니다.";
+            isPasswordMatch = false;
+        } else {
+            confirmPwMessage.textContent = "";
+            isPasswordMatch = true;
+        }
     };
 
     const validateDetailAddress = () => {
@@ -29,55 +55,124 @@ document.addEventListener("DOMContentLoaded", function () {
             detailAddressMessage.textContent = "";
             isDetailAddressValid = true;
         }
-        toggleSubmitButton();
     };
 
-    const toggleSubmitButton = () => {
-        submitButton.disabled = !(isNameValid && isDetailAddressValid);
+    const validatePhoneNumber = () => {
+        const phoneRegex = /^[0-9]{4}$/;
+
+        if (!phoneRegex.test(phoneMiddle.value) || !phoneRegex.test(phoneLast.value)) {
+            phoneMessage.textContent = "유효한 전화번호를 입력해주세요.";
+            isPhoneNumberValid = false;
+        } else {
+            phoneMessage.textContent = "";
+            isPhoneNumberValid = true;
+        }
     };
 
-    memberName.addEventListener("input", validateName);
-    detailAddress.addEventListener("input", validateDetailAddress);
+    const validateName = () => {
+        const nameRegex = /^[가-힣]{2,}$/;
+        if (!nameRegex.test(memberName.value)) {
+            nameMessage.textContent = "이름은 한글로 2자 이상이어야 합니다.";
+            isNameValid = false;
+        } else {
+            nameMessage.textContent = "";
+            isNameValid = true;
+        }
+    };
 
-    form.addEventListener("submit", function (event) {
+    const validateForm = () => {
+        validatePassword();
+        validateConfirmPassword();
+        validateDetailAddress();
+        validatePhoneNumber();
+        validateName();
+
+        updateButton.disabled = !(isPasswordValid && isPasswordMatch && isDetailAddressValid && isPhoneNumberValid && isNameValid);
+    };
+
+    memberPw.addEventListener("input", () => {
+        validatePassword();
+        validateConfirmPassword();
+        validateForm();
+    });
+
+    confirmMemberPw.addEventListener("input", () => {
+        validateConfirmPassword();
+        validateForm();
+    });
+
+    detailAddress.addEventListener("input", () => {
+        validateDetailAddress();
+        validateForm();
+    });
+
+    phoneMiddle.addEventListener("input", () => {
+        validatePhoneNumber();
+        validateForm();
+    });
+
+    phoneLast.addEventListener("input", () => {
+        validatePhoneNumber();
+        validateForm();
+    });
+
+    memberName.addEventListener("input", () => {
+        validateName();
+        validateForm();
+    });
+
+    // JWT 토큰에서 사용자 권한 확인
+    const token = getCookie('jwtToken'); // JWT 토큰 가져오기 (예시로 쿠키 사용)
+    if (token) {
+        const decodedToken = parseJwt(token);
+        const userRole = decodedToken.auth;
+        
+        if (userRole === 'ROLE_ADMIN') {
+            document.getElementById('authField').style.display = 'block';
+        }
+    }
+
+    updateForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        if (!isNameValid || !isDetailAddressValid) {
+        if (!isPasswordValid || !isPasswordMatch || !isDetailAddressValid || !isPhoneNumberValid || !isNameValid) {
             return;
         }
 
         const formData = {
-            id: document.getElementById('id').value,  // 추가된 부분
+            id: document.getElementById('id').value,
             memberId: document.getElementById('memberId').value,
+            memberName: document.getElementById('memberName').value,
+            memberPw: document.getElementById('memberPw').value,
+            memberAddress: `${document.getElementById('sample4_postcode').value}, ${document.getElementById('sample4_roadAddress').value}, ${document.getElementById('sample4_jibunAddress').value}, ${document.getElementById('sample4_detailAddress').value}, ${document.getElementById('sample4_extraAddress').value}`,
+            memberPhone: `${document.getElementById('memberPhoneCategory').value}-${document.getElementById('memberPhoneMiddle').value}-${document.getElementById('memberPhoneLast').value}`,
             memberEmail: document.getElementById('memberEmail').value,
-            memberPhone: document.getElementById('memberPhone').value,
-            memberName: memberName.value,
-            memberAddress: `${document.getElementById('sample4_postcode').value}, ${document.getElementById('sample4_roadAddress').value}, ${document.getElementById('sample4_jibunAddress').value}, ${detailAddress.value}, ${document.getElementById('sample4_extraAddress').value}`
+            memberType: document.getElementById('memberType').value,
+            memberAuth: document.getElementById('memberAuth').value
         };
 
-        fetch("/member/additional-info", {
-            method: "POST",
+        fetch(`/member/update/${formData.id}`, {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(formData)
         })
         .then(response => response.json())
         .then(data => {
             if (data.code === 'SU') {
-                alert('추가 정보가 성공적으로 저장되었습니다.');
+                alert('회원 정보가 성공적으로 수정되었습니다.');
                 window.location.href = '/';
             } else {
-                alert('추가 정보 저장에 실패했습니다.');
+                alert('회원 정보 수정에 실패했습니다.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('추가 정보 저장 중 오류가 발생했습니다.');
+            alert('회원 정보 수정 중 오류가 발생했습니다.');
         });
     });
 
-    validateName();
-    validateDetailAddress();
+    validateForm();
 });
 
 // JWT 토큰을 파싱하여 JSON 객체로 변환하는 함수

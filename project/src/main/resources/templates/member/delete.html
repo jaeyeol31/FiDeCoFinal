@@ -4,17 +4,47 @@
     <meta charset="UTF-8">
     <title>회원 탈퇴 확인</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-	<div th:replace="navbar.html"></div>
+    <div th:replace="navbar.html"></div>
     <h1>회원 탈퇴 확인</h1>
     <p>정말로 회원 탈퇴하시겠습니까?</p>
-    <form th:action="@{/member/delete/{id}(id=${member.id})}" method="post">
+    <form id="deleteForm" th:action="@{/member/delete/{id}(id=${member.id})}" method="post">
         <input type="hidden" name="id" th:value="${member.id}">
         <input type="submit" value="예, 탈퇴합니다">
     </form>
     <br>
     <a href="/">취소하고 돌아가기</a>
+
+    <script>
+        function deleteCookie(name) {
+            document.cookie = name + '=; Max-Age=0; path=/; domain=' + window.location.hostname;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForm = document.getElementById('deleteForm');
+            if (deleteForm) {
+                deleteForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // 폼 제출 방지
+
+                    const memberId = document.querySelector('input[name="id"]').value;
+
+                    fetch(`/member/delete/${memberId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        credentials: 'include'
+                    }).then(() => {
+                        deleteCookie('jwtToken'); // 쿠키에서 JWT 토큰 삭제
+                        window.location.href = '/'; // 로그아웃 후 리다이렉션
+                    }).catch(error => {
+                        console.error('회원 탈퇴 실패:', error);
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

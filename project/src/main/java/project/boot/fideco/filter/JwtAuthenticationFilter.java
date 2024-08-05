@@ -216,10 +216,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             MemberEntity memberEntity = memberRepository.findByMemberId(memberId);
-            if (memberEntity == null) {
-                response.sendRedirect("/member/additional-info");
-                return;
-            }
+//            if (memberEntity == null) {
+//                response.sendRedirect("/member/update");
+//                return;
+//            }
 
             String auth = memberEntity.getMemberAuth(); // role : ROLE_USER, ROLE_ADMIN
 

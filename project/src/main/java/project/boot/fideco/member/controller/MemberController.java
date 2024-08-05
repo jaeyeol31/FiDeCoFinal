@@ -241,15 +241,4 @@ public class MemberController {
         }
     }
     
-    @PostMapping("/additional-info")
-    public ResponseEntity<?> saveAdditionalInfo(@RequestBody MemberEntity memberEntity) {
-        try {
-            System.out.println("Received memberEntity: " + memberEntity); // 디버깅용 로그
-            memberService.updateMember(memberEntity);
-            return ResponseEntity.ok(Collections.singletonMap("code", "SU"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(Collections.singletonMap("code", "FA"));
-        }
-    }
 }

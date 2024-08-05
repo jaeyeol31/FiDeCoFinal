@@ -38,7 +38,7 @@
     <div style="text-align: center;">
         <a class="btn btn-primary" th:href="@{/member/update/{id}(id=${member.id})}">수정</a> 
         <a class="btn btn-danger" th:href="@{/member/delete/{id}(id=${member.id})}">회원탈퇴</a>
-        <a class="btn btn-info" th:href="@{/cart/{memberId}(memberId=${member.id})}">장바구니</a>
+        <a class="btn btn-info" th:href="@{/cart/{memberId}(memberId=${member.memberId})}">장바구니</a>
         <a class="btn btn-info" th:href="@{/orders/member/{memberId}(memberId=${member.id})}">주문 목록 보기</a>
     </div>
 </body>

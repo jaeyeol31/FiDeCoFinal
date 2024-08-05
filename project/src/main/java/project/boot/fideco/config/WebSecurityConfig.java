@@ -109,7 +109,7 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/NoticeSelect", "/NoticeSelectDetail", "/NoticeSearch").permitAll()
-                        .requestMatchers("/products/productView", "/products/productOrder/**").permitAll()
+                        .requestMatchers("/products/productView", "/products/productOrder/**","products/productList").permitAll()
                         .requestMatchers("/products/**", "/member/memberList", "/cart/list", "/orders/list", "/orders/update").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedPage("/access-denied"))
