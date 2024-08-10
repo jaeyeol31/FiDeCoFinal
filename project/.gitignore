@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+# .gitignore
+
+# Ignore the secret properties file
+/src/main/resources/application-secret.properties
+
