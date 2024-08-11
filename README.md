@@ -52,7 +52,7 @@
 - **보안성**: 스프링 시큐리티와 OAuth 2.0을 통해 안전한 인증 및 권한 관리를 제공합니다.
 - **사용자 편의성**: 이메일 인증, 간편 로그인, 카카오 주소 API 통합 등을 통해 사용자 경험을 향상시킵니다.
 - **관리 효율성**: 관리자 페이지를 통해 시스템을 효율적으로 관리할 수 있습니다.
-
+<img width="1608" alt="스크린샷 2024-08-11 오후 8 44 53" src="https://github.com/user-attachments/assets/eb566343-a144-4b54-852b-4a65463a1d05">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 06" src="https://github.com/user-attachments/assets/b6ea2829-1ecc-4087-9b6b-0127ca54ba20">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 09" src="https://github.com/user-attachments/assets/9a0deaba-e831-482a-a44f-b7eab7500410">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 12" src="https://github.com/user-attachments/assets/5d26ddf1-17c2-4deb-b7a7-9173c7d2d107">
