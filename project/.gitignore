@@ -40,3 +40,4 @@ out/
 # Ignore the secret properties file
 /src/main/resources/application-secret.properties
 
+.DS_Store
