@@ -55,6 +55,12 @@
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 44 53" src="https://github.com/user-attachments/assets/eb566343-a144-4b54-852b-4a65463a1d05">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 06" src="https://github.com/user-attachments/assets/b6ea2829-1ecc-4087-9b6b-0127ca54ba20">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 09" src="https://github.com/user-attachments/assets/9a0deaba-e831-482a-a44f-b7eab7500410">
+
+
+<img width="1581" alt="스크린샷 2024-08-11 오후 8 56 03" src="https://github.com/user-attachments/assets/354d0669-3391-42c1-bfb6-1dba92536fe7">
+<img width="1581" alt="스크린샷 2024-08-11 오후 8 56 01" src="https://github.com/user-attachments/assets/2bf956b4-d674-473b-b617-32138da11588">
+<img width="1581" alt="스크린샷 2024-08-11 오후 8 55 57" src="https://github.com/user-attachments/assets/58435670-5796-458d-8c94-f739d2b4d66e">
+
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 12" src="https://github.com/user-attachments/assets/5d26ddf1-17c2-4deb-b7a7-9173c7d2d107">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 15" src="https://github.com/user-attachments/assets/b2009c32-8782-4dea-bb57-197f1a80ffa5">
 <img width="1608" alt="스크린샷 2024-08-11 오후 8 45 17" src="https://github.com/user-attachments/assets/9ea2c2b7-013a-4e88-aa12-2292c13db37e">
