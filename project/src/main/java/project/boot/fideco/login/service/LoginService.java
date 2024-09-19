@@ -19,36 +19,39 @@ import project.boot.fideco.provider.JwtProvider;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final JwtProvider jwtProvider;
+    private final MemberRepository memberRepository; // 회원 레포지토리
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 비밀번호 암호화를 위한 엔코더
+    private final JwtProvider jwtProvider; // JWT 발급을 위한 프로바이더
 
+    // 로그인 처리 로직
     public ResponseEntity<? super LogInResponseDTO> logIn(LogInRequestDTO dto, HttpServletResponse response) {
         String token = null;
         try {
+            // 입력받은 회원 ID로 회원 조회
             String memberId = dto.getMemberId();
             MemberEntity memberEntity = memberRepository.findByMemberId(memberId);
-            if (memberEntity == null) return LogInResponseDTO.logInFail();
+            if (memberEntity == null) return LogInResponseDTO.logInFail(); // 회원이 없으면 실패 응답
 
+            // 입력받은 비밀번호와 데이터베이스에 저장된 비밀번호 비교
             String memberPw = dto.getMemberPw();
             String encodedPassword = memberEntity.getMemberPw();
             boolean isMatched = passwordEncoder.matches(memberPw, encodedPassword);
-            if (!isMatched) return LogInResponseDTO.logInFail();
+            if (!isMatched) return LogInResponseDTO.logInFail(); // 비밀번호가 일치하지 않으면 실패 응답
 
+            // 비밀번호가 일치하면 JWT 토큰 생성
             token = jwtProvider.create(memberEntity.getId(), memberEntity.getMemberId(), memberEntity.getMemberAuth());
 
-
+            // JWT 토큰을 쿠키에 저장
             Cookie cookie = new Cookie("jwtToken", token);
-            cookie.setHttpOnly(false); // 자바스크립트에서 접근하지 못하게 설정
-            cookie.setSecure(false); // HTTPS에서만 전송
+            cookie.setHttpOnly(false); // HTTP 전송만 가능하도록 설정
+            cookie.setSecure(false); // HTTPS에서만 전송되도록 설정
             cookie.setPath("/");
-            response.addCookie(cookie);
+            response.addCookie(cookie); // 쿠키 추가
 
         } catch (Exception exception) {
             exception.printStackTrace();
-            return ResponseDTO.databaseError();
+            return ResponseDTO.databaseError(); // 예외 발생 시 데이터베이스 오류 응답
         }
-        return LogInResponseDTO.success(token);
+        return LogInResponseDTO.success(token); // 성공 시 JWT 토큰과 함께 응답
     }
 }
-

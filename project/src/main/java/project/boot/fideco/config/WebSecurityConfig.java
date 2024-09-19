@@ -23,35 +23,39 @@ public class WebSecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+        // CORS 설정과 함께 보안 필터 체인을 구성
         httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // CSRF 보안 비활성화
                 .csrf(csrf -> csrf.disable())
+                // 세션을 상태를 유지하지 않음 (JWT 사용 시 필요)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 권한에 따른 접근 설정 
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/NoticeSelect", "/NoticeSelectDetail", "/NoticeSearch").permitAll()
-                        .requestMatchers("/products/productView", "/products/productOrder/**","products/productList").permitAll()
-                        .requestMatchers("/products/**", "/member/memberList", "/cart/list", "/orders/list", "/orders/update").hasRole("ADMIN")
-                        .anyRequest().permitAll())
-                .exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedPage("/access-denied"))
-                .oauth2Login(oauth2 -> oauth2
-                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*"))
-                       )
+                        .requestMatchers("/NoticeSelect", "/NoticeSelectDetail", "/NoticeSearch").permitAll()  // 공용
+                        .requestMatchers("/products/**", "/member/memberList", "/cart/list", "/orders/list", "/orders/update").hasRole("ADMIN") // 관리자
+                        .anyRequest().permitAll())  // 그 외 요청은 모두 허용 -> 사용자
+                // OAuth2 로그인 설정
+                .exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedPage("/access-denied")) // 접근 권한이 없을 시 이동할 페이지 설정
+                .oauth2Login(oauth2 -> oauth2.redirectionEndpoint(endpoint -> endpoint.baseUri("/login/oauth2/code/*")))
+                // JWT 필터 추가
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
+        return httpSecurity.build(); // 보안 필터 체인을 반환
     }
 
+    // CORS 설정을 위한 메서드
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOriginPattern("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addExposedHeader("Authorization");
+        corsConfiguration.addAllowedOriginPattern("*");  // 모든 도메인 허용
+        corsConfiguration.addAllowedMethod("*");  // 모든 HTTP 메서드 허용
+        corsConfiguration.addAllowedHeader("*");  // 모든 헤더 허용
+        corsConfiguration.setAllowCredentials(true);  // 쿠키 사용 허용
+        corsConfiguration.addExposedHeader("Authorization");  // Authorization 헤더 노출
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);  // 모든 경로에 대해 CORS 설정 적용
 
-        return source;
+        return source;  // CORS 설정 반환
     }
 }

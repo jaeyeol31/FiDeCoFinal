@@ -1,66 +1,3 @@
-//package project.boot.fideco.member.entity;
-//
-//import jakarta.persistence.Column;
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.Table;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//import lombok.ToString;
-//import project.boot.fideco.dto.request.auth.SignUpRequestDTO;
-//
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity(name = "member")
-//@Table(name = "member")
-//public class MemberEntity {
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name = "id")
-//    private Long id; // 자동 생성되는 회원 ID
-//
-//    @Column(name = "member_id")
-//    private String memberId;
-//
-//    @Column(name = "member_name")
-//    private String memberName;
-//
-//    @Column(name = "member_pw")
-//    private String memberPw;
-//
-//    @Column(name = "member_address")
-//    private String memberAddress;
-//
-//    @Column(name = "member_phone")
-//    private String memberPhone;
-//
-//    @Column(name = "member_email")
-//    private String memberEmail;
-//
-//    @Column(name = "member_auth")
-//    private String memberAuth; // 권한
-//
-//    @Column(name = "member_type")
-//    private String memberType; //로그인 방식
-//	
-//	public MemberEntity(SignUpRequestDTO dto) {
-//		this.memberId = dto.getMemberId();
-//        this.memberName = dto.getMemberName();
-//        this.memberPw = dto.getMemberPw();
-//        this.memberAddress = dto.getMemberAddress();
-//        this.memberPhone = dto.getMemberPhone();
-//        this.memberEmail = dto.getMemberEmail();
-//        this.memberAuth = "ROLE_USER"; // 권한의 기본 유저로
-//        this.memberType = "app"; // 로그인 방식 
-//	}
-//	
-//}
 package project.boot.fideco.member.entity;
 
 import jakarta.persistence.*;
@@ -86,41 +23,42 @@ public class MemberEntity {
     private Long id; // 자동 생성되는 회원 ID
 
     @Column(name = "member_id", unique = true, nullable = false)
-    private String memberId;
+    private String memberId; // 회원 ID (고유값, 필수 입력)
 
     @Column(name = "member_name")
-    private String memberName;
+    private String memberName; // 회원 이름
 
     @Column(name = "member_pw")
-    private String memberPw;
+    private String memberPw; // 회원 비밀번호
 
     @Column(name = "member_address")
-    private String memberAddress;
+    private String memberAddress; // 회원 주소
 
     @Column(name = "member_phone")
-    private String memberPhone;
+    private String memberPhone; // 회원 전화번호
 
     @Column(name = "member_email")
-    private String memberEmail;
+    private String memberEmail; // 회원 이메일
 
     @Column(name = "member_auth")
-    private String memberAuth; // 권한
+    private String memberAuth; // 권한 (기본값: ROLE_USER)
 
     @Column(name = "member_type")
-    private String memberType; // 로그인 방식
+    private String memberType; // 로그인 방식 -> 아이디(app), 카카오, 네이버
 
-    // CartEntity와의 관계 설정
+    // CartEntity와의 1:N 관계 설정
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartEntity> carts = new ArrayList<>();
+    private List<CartEntity> carts = new ArrayList<>(); // 회원과 연관된 장바구니 리스트
 
-    // OrderEntity와의 관계 설정
+    // OrderEntity와의 1:N 관계 설정
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderEntity> orders = new ArrayList<>();
+    private List<OrderEntity> orders = new ArrayList<>(); // 회원과 연관된 주문 리스트
 
-    // Payment와의 관계 설정
+    // Payment와의 1:N 관계 설정
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Payment> payments = new ArrayList<>();
+    private List<Payment> payments = new ArrayList<>(); // 회원과 연관된 결제 리스트
 
+    // 회원가입 요청(SignUpRequestDTO)으로부터 MemberEntity를 생성하는 생성자
     public MemberEntity(SignUpRequestDTO dto) {
         this.memberId = dto.getMemberId();
         this.memberName = dto.getMemberName();
@@ -128,7 +66,7 @@ public class MemberEntity {
         this.memberAddress = dto.getMemberAddress();
         this.memberPhone = dto.getMemberPhone();
         this.memberEmail = dto.getMemberEmail();
-        this.memberAuth = "ROLE_USER"; // 권한의 기본 유저로
-        this.memberType = "app"; // 로그인 방식 
+        this.memberAuth = "ROLE_USER"; // 기본 권한은 USER
+        this.memberType = "app"; // 기본 로그인 방식은 app
     }
 }
