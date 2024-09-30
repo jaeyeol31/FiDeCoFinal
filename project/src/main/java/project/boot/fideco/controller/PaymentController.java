@@ -202,9 +202,13 @@ public class PaymentController {
         OrderEntity order = orderService.getOrderById(orderId);
         order.setPaymentStatus(PaymentStatus.valueOf(paymentStatus));
         orderService.saveOrder(order);
+        
+        logger.info("Cart cleared befor");
 
         // 결제 완료 후 장바구니 비우기
         cartService.clearCart(memberId);
+        logger.info("Cart cleared for memberId: {}", memberId);
+
         
         model.addAttribute("merchant_uid", merchantUid);
         model.addAttribute("order_id", orderId);

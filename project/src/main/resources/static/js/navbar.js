@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const adminItem = document.getElementById('adminItem');
 
     // 상품 목록 및 게시판 항목은 항상 보이도록 설정
-    productListItem.style.display = 'block';
     noticeSelectItem.style.display = 'block';
 
     if (token) {
@@ -49,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 유저 역할일 때 추가 설정이 필요한 경우 여기에 추가
                 } else if (userRole === 'ROLE_ADMIN') {
                     memberListItem.style.display = 'block';
+                    productListItem.style.display = 'block';
                     productSaveItem.style.display = 'block';
                     adminItem.style.display = 'block'; // 관리자 페이지 링크 표시
                 }
