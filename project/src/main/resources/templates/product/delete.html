@@ -2,46 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-	<title>제품 삭제</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/style.css">
+<title>제품 삭제</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 	<div th:replace="navbar.html"></div>
-	<h2>제품 삭제</h2>
-	<p>정말로 이 제품을 삭제하시겠습니까?</p>
-	<table border="1">
-		<tr>
-			<th>제품 ID</th>
-			<td th:text="${product.productId}"></td>
-		</tr>
-		<tr>
-			<th>제품명</th>
-			<td th:text="${product.productName}"></td>
-		</tr>
-		<tr>
-			<th>가격</th>
-			<td th:text="${product.productPrice}"></td>
-		</tr>
-		<tr>
-			<th>등록일</th>
-			<td th:text="${product.productRegisdate}"></td>
-		</tr>
-		<tr>
-			<th>제품 소개</th>
-			<td th:text="${product.productIntro}"></td>
-		</tr>
-		<tr>
-			<th>제품 카테고리</th>
-			<td th:text="${product.productCategory}"></td>
-		</tr>
-	</table>
-	<br>
-	<form th:action="@{/products/delete/{id}(id=${product.productId})}"
-		method="post">
-		<button type="submit">삭제</button>
-	</form>
-	<br>
-	<a th:href="@{/products/MemberList}">취소</a>
+	<div class="container mt-5 w-auto">
+		<h2 class="text-center">제품 삭제</h2>
+		<table class="table table-bordered">
+			<tr>
+				<th>제품 ID</th>
+				<td th:text="${product.productId}"></td>
+			</tr>
+			<tr>
+				<th>제품명</th>
+				<td th:text="${product.productName}"></td>
+			</tr>
+			<tr>
+				<th>가격</th>
+				<td th:text="${product.productPrice}"></td>
+			</tr>
+			<tr>
+				<th>등록일</th>
+				<td th:text="${product.productRegisdate}"></td>
+			</tr>
+			<tr>
+				<th>제품 소개</th>
+				<td th:text="${product.productIntro}"></td>
+			</tr>
+			<tr>
+				<th>제품 카테고리</th>
+				<td th:text="${product.productCategory}"></td>
+			</tr>
+		</table>
+		<br>
+		<form th:action="@{/products/delete/{id}(id=${product.productId})}" method="post" class="text-center mx-auto">
+			<p>정말로 이 제품을 삭제하시겠습니까?</p>
+			<div class="form-group">
+				<button type="submit" class="btn btn-danger">삭제</button>
+				<button type="button" class="btn btn-secondary ml-2" th:onclick="|window.location='@{/products/productList}'|">취소</button>
+			</div>
+		</form>
+		<br>
+	</div>
 </body>
 </html>

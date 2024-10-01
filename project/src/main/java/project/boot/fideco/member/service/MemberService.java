@@ -6,8 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import project.boot.fideco.dto.response.ResponseDTO;
+import project.boot.fideco.cart.service.CartService;
 import project.boot.fideco.dto.request.auth.CheckCertificationRequestDTO;
 import project.boot.fideco.dto.request.auth.EmailCertificationRequestDTO;
 import project.boot.fideco.dto.request.auth.IdCheckRequestDTO;
@@ -30,9 +32,11 @@ import java.util.Optional;
 public class MemberService {
 
     @Autowired
-    private final MemberRepository memberRepository; 
+    private final MemberRepository memberRepository;
+    @Autowired
+    private final CartService cartService; 
 
-    private final EmailProvider emailProvider; 
+    private final EmailProvider emailProvider;
     private final CertificationRepository certificationRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 비밀번호 암호화를 위한 엔코더
@@ -69,9 +73,18 @@ public class MemberService {
         }
     }
 
-    // 회원 삭제
+ // 회원 삭제 처리 메서드
+    @Transactional
     public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+        Optional<MemberEntity> member = memberRepository.findById(id);
+        if (member.isPresent()) {
+            String memberId = member.get().getMemberId();
+            // 회원 탈퇴 시 해당 회원의 장바구니 삭제
+            cartService.deleteCartByMemberId(memberId);
+            memberRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Member not found");
+        }
     }
 
     // 아이디 중복 확인
@@ -99,14 +112,12 @@ public class MemberService {
 
             // 아이디 중복 확인
             boolean isExistId = memberRepository.existsByMemberId(memberId);
-            if (isExistId)
-                return EmailCertificationResponseDTO.duplicateId(); // 중복일 경우 응답
+            if (isExistId) return EmailCertificationResponseDTO.duplicateId(); // 중복일 경우 응답
 
             // 인증번호 생성 및 발송
             String certificationNumber = getCertificationNumber();
             boolean isSuccessed = emailProvider.sendCertificationMail(email, certificationNumber);
-            if (!isSuccessed)
-                return EmailCertificationResponseDTO.mailSendFail(); // 이메일 발송 실패 시 응답
+            if (!isSuccessed) return EmailCertificationResponseDTO.mailSendFail(); // 이메일 발송 실패 시 응답
 
             // 인증 정보 저장
             CertificationEntity certificationEntity = new CertificationEntity(memberId, email, certificationNumber);
@@ -140,10 +151,8 @@ public class MemberService {
                 return CheckCertificationResponseDTO.certificationFail(); // 인증 정보가 없을 경우 실패 응답
 
             // 인증번호 및 이메일이 일치하는지 확인
-            boolean isMatched = certificationEntity.getMemberEmail().equals(memberEmail)
-                    && certificationEntity.getCertificationNumber().equals(certificationNumber);
-            if (!isMatched)
-                return CheckCertificationResponseDTO.certificationFail(); // 불일치 시 실패 응답
+            boolean isMatched = certificationEntity.getMemberEmail().equals(memberEmail) && certificationEntity.getCertificationNumber().equals(certificationNumber);
+            if (!isMatched) return CheckCertificationResponseDTO.certificationFail(); // 불일치 시 실패 응답
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -178,8 +187,7 @@ public class MemberService {
             }
 
             // 인증번호 및 이메일 일치 여부 확인
-            boolean isMatched = certificationEntity.getMemberEmail().equals(memberEmail)
-                    && certificationEntity.getCertificationNumber().equals(certificationNumber);
+            boolean isMatched = certificationEntity.getMemberEmail().equals(memberEmail) && certificationEntity.getCertificationNumber().equals(certificationNumber);
             if (!isMatched) {
                 System.out.println("Certification failed for Member ID: " + memberId);
                 return SignUpResponseDTO.certificationFail(); // 불일치 시 실패 응답

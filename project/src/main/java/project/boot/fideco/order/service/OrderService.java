@@ -173,7 +173,8 @@ public class OrderService {
         this.paymentRepository = paymentRepository;
         this.orderItemRepository = orderItemRepository;
     }
-
+    
+    //
     @Transactional
     public Long createOrder(Long cartId, Long memberId, int orderAmount) {
         OrderEntity order = new OrderEntity();

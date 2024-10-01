@@ -73,6 +73,11 @@ public class CartService {
 	}
 
 	@Transactional
+	public void deleteCartByMemberId(String memberId) {
+		cartRepository.findByMemberId(memberId).ifPresent(cartRepository::delete);
+	}
+
+	@Transactional
 	public void deleteCartItem(Long cartItemId) {
 		cartItemRepository.deleteById(cartItemId);
 	}

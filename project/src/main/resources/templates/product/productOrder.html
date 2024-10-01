@@ -42,19 +42,20 @@
                 </table>
             </div>
         </div>
+
+        <br>
+        <form id="addToCartForm" method="post">
+            <a href="/products/productList" class="btn btn-primary">제품 목록으로 돌아가기</a>
+            <input type="hidden" name="productId" th:value="${product.productId}" />
+            <input type="hidden" name="quantity" value="1" />
+            <button type="submit" class="btn btn-success ml-2">장바구니에 담기</button>
+        </form>
         <div class="row mt-4">
             <div class="col-12">
                 <h4>제품 소개</h4>
                 <p class="product-intro" th:text="${product.productIntro}"></p>
             </div>
         </div>
-        <br>
-        <a href="/products/productList" class="btn btn-primary">제품 목록으로 돌아가기</a>
-        <form id="addToCartForm" method="post">
-            <input type="hidden" name="productId" th:value="${product.productId}" />
-            <input type="hidden" name="quantity" value="1" />
-            <button type="submit" class="btn btn-success ml-2">장바구니에 담기</button>
-        </form>
     </div>
 
     <script>

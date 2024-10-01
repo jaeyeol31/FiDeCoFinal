@@ -24,17 +24,21 @@ public class WebSecurityConfig {
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
 		// CORS 설정과 함께 보안 필터 체인을 구성
-		httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				// CSRF 보안 비활성화
+		httpSecurity
+				//현재는 타임리프만 사용으로 설정 x
+//				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+				// CSRF 보안 비활성화(JWT 사용)
 				.csrf(csrf -> csrf.disable())
+
 				// 세션을 상태를 유지하지 않음 (JWT 사용 시 필요)
 				.sessionManagement(
 						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
 				// 권한에 따른 접근 설정
 				.authorizeHttpRequests(request -> request
 						.requestMatchers("/NoticeSelect", "/NoticeSelectDetail", "/NoticeSearch","/products/compareProducts/**","/products/productView/**","/products/productOrder/**").permitAll() // 공용
-						.requestMatchers("/products/**", "/member/memberList", "/cart/list", "/orders/list", "/orders/update")
-						.hasRole("ADMIN") // 관리자
+						.requestMatchers("/products/**", "/member/memberList", "/cart/list", "/orders/list", "/orders/update").hasRole("ADMIN") // 관리자
 						.anyRequest().permitAll()) // 그 외 요청은 모두 허용 -> 사용자
 				// 접근 권한이 없을 시 이동할 페이지 설정
 				.exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedPage("/access-denied"))
@@ -48,19 +52,19 @@ public class WebSecurityConfig {
 		return httpSecurity.build(); // 보안 필터 체인을 반환
 	}
 
-	// CORS 설정을 위한 메서드
-	@Bean
-	protected CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOriginPattern("*"); // 모든 도메인 허용
-		corsConfiguration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
-		corsConfiguration.addAllowedHeader("*"); // 모든 헤더 허용
-		corsConfiguration.setAllowCredentials(true); // 쿠키 사용 허용
-		corsConfiguration.addExposedHeader("Authorization"); // Authorization 헤더 노출
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", corsConfiguration); // 모든 경로에 대해 CORS 설정 적용
-
-		return source; // CORS 설정 반환
-	}
+	// CORS 설정을 위한 메서드 -> 사용안함
+//	@Bean
+//	protected CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration corsConfiguration = new CorsConfiguration();
+//		corsConfiguration.addAllowedOriginPattern("*"); // 모든 도메인 허용
+//		corsConfiguration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+//		corsConfiguration.addAllowedHeader("*"); // 모든 헤더 허용
+//		corsConfiguration.setAllowCredentials(true); // 쿠키 사용 허용
+//		corsConfiguration.addExposedHeader("Authorization"); // Authorization 헤더 노출
+//
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", corsConfiguration); // 모든 경로에 대해 CORS 설정 적용
+//
+//		return source; // CORS 설정 반환
+//	}
 }

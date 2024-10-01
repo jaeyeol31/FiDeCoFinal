@@ -23,42 +23,40 @@ import project.boot.fideco.member.service.MemberService;
 @RequiredArgsConstructor
 public class AuthController {
 
-	private final MemberService memberService;
+    private final MemberService memberService;
 
-	@PostMapping("/id-check")
+    @PostMapping("/id-check")
     public ResponseEntity<? super IdCheckResponseDTO> idCheck(
             @RequestBody @Valid IdCheckRequestDTO requestBody) {
         return memberService.idcheck(requestBody);
     }
 
-	@PostMapping("/email-certification")
-	public ResponseEntity<? super EmailCertificationResponseDTO> emailCertification(
-			
-			@RequestBody @Valid EmailCertificationRequestDTO requestBody
-			) {
-			ResponseEntity<? super EmailCertificationResponseDTO> response = memberService.emailCertification(requestBody);
+    @PostMapping("/email-certification")
+    public ResponseEntity<? super EmailCertificationResponseDTO> emailCertification(@RequestBody @Valid EmailCertificationRequestDTO requestBody) {
 
-		return response;
-	}
-	
-	@PostMapping("/check-certification")
-	public ResponseEntity<? super CheckCertificationResponseDTO> checkCertification(
-	
-			@RequestBody @Valid CheckCertificationRequestDTO requestBody
-			) {
-			ResponseEntity<? super CheckCertificationResponseDTO> response = memberService.checkCertification(requestBody);
+        ResponseEntity<? super EmailCertificationResponseDTO> response = memberService.emailCertification(requestBody);
 
-		return response;
-	}
-	@PostMapping("/signup")
-	
-	public ResponseEntity<? super SignUpResponseDTO> signUp(
-			@RequestBody @Valid SignUpRequestDTO requestBody
-			){
-		ResponseEntity<? super SignUpResponseDTO> response = memberService.signUp(requestBody);
-		return response;
-	}
-	
-	
+        return response;
+    }
+
+    @PostMapping("/check-certification")
+    public ResponseEntity<? super CheckCertificationResponseDTO> checkCertification(
+
+            @RequestBody @Valid CheckCertificationRequestDTO requestBody
+    ) {
+        ResponseEntity<? super CheckCertificationResponseDTO> response = memberService.checkCertification(requestBody);
+
+        return response;
+    }
+
+    @PostMapping("/signup")
+
+    public ResponseEntity<? super SignUpResponseDTO> signUp(
+            @RequestBody @Valid SignUpRequestDTO requestBody
+    ) {
+        ResponseEntity<? super SignUpResponseDTO> response = memberService.signUp(requestBody);
+        return response;
+    }
+
 
 }
