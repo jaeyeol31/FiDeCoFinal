@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>제품 업데이트</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="navbar.html"></div>
+    <h2>제품 업데이트</h2>
+    <!-- <form th:action="@{/products/update/{id}(id=${product.productId})}" th:object="${product}" method="post" enctype="multipart/form-data"> -->
+    <form th:action="@{/products/update/{id}(id=${productEntity.productId})}" th:object="${productEntity}" method="post" enctype="multipart/form-data">
+    
+        <label for="productName">제품명:</label>
+        <input type="text" id="productName" th:field="*{productName}" required><br><br>
+        
+        <label for="productPrice">가격:</label>
+        <input type="number" id="productPrice" th:field="*{productPrice}" required><br><br>
+        
+        <label for="productRegisDate">등록일:</label>
+        <input type="date" id="productRegisDate" th:field="*{productRegisdate}" required><br><br>
+        
+        <label for="productIntro">제품 소개:</label><br>
+        <textarea id="productIntro" th:field="*{productIntro}" rows="4" cols="50" required></textarea><br><br>
+        
+        <label for="productImage">제품 이미지:</label>
+        <input type="file" id="productImage" name="imageFile"><br><br>
+        
+        <label for="productCategory">제품 카테고리:</label>
+        <select id="productCategory" th:field="*{productCategory}" required>
+            <option value="">카테고리 선택</option>
+           <option value="1">사무용 / 가정용</option>
+            <option value="2">고성능 / 전문가용</option>
+            <option value="3">3D게임 / 그래픽용</option>
+        </select><br><br>
+        
+        <button type="submit">업데이트</button>
+    </form>
+    <br>
+    <a th:href="@{/products/productList}">제품 목록으로 돌아가기</a>
+</body>
+</html>

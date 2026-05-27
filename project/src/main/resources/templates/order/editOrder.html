@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 수정</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:replace="~{navbar.html}"></div>
+    <div class="container mt-4">
+        <h2>주문 수정</h2>
+        <form th:action="@{/orders/{orderId}/edit(orderId=${order.orderId})}" th:object="${order}" method="post">
+            <div class="form-group">
+                <label for="orderAmount">가격</label>
+                <input type="number" id="orderAmount" class="form-control" th:field="*{orderAmount}">
+            </div>
+            <div class="form-group">
+                <label for="paymentStatus">결제 상태</label>
+                <select id="paymentStatus" class="form-control" th:field="*{payment.paymentStatus}">
+                    <option value="PENDING">PENDING</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                    <option value="FAILED">FAILED</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">수정</button>
+        </form>
+    </div>
+</body>
+</html>

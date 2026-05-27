@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>제품 상세 정보</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="container mt-4">
+        <h2>제품 상세 정보</h2>
+        <table class="table table-bordered">
+            <tr>
+                <td rowspan="6" class="text-center align-middle">
+                    <img th:src="@{/img/product/{imagePath}(imagePath=${product.productImagePath})}" class="img-fluid" alt="Product Image" />
+                </td>
+                <th>제품 ID</th>
+                <td th:text="${product.productId}"></td>
+            </tr>
+            <tr>
+                <th>제품명</th>
+                <td th:text="${product.productName}"></td>
+            </tr>
+            <tr>
+                <th>가격</th>
+                <td th:text="${product.productPrice}"></td>
+            </tr>
+            <tr>
+                <th>등록일</th>
+                <td th:text="${product.productRegisdate}"></td>
+            </tr>
+            <tr>
+                <th>제품 소개</th>
+                <td th:text="${product.productIntro}"></td>
+            </tr>
+            <tr>
+                <th>제품 카테고리</th>
+                <td th:text="${product.productCategory}"></td>
+            </tr>
+        </table>
+        <a href="/products/productList" class="btn btn-primary mt-3">제품 목록으로 돌아가기</a>
+    </div>
+</body>
+</html>

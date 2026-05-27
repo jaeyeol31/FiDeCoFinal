@@ -1,0 +1,48 @@
+
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 완료</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min_4.5.0.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+    <header id="main-header" class="py-2 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>결제 완료</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section id="actions" class="py-4 mb-4 bg-light"></section>
+    <section id="details">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>결제가 완료되었습니다.</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>결제 내역</p>
+                            <ul>
+                                <li>결제 번호: <span th:text="${merchant_uid}"></span></li>
+                                <li>주문 번호: <span th:text="${order_id}"></span></li>
+                                <li>가격: <span th:text="${amount}"></span></li>
+                                <li>결제 상태: <span th:text="${paymentstatus}"></span></li>
+                                <li>결제 일자: <span th:text="${formattedPaymentDate}"></span></li>
+                            </ul>
+                            <button th:onclick="|location.href='/'|">홈으로</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+ 

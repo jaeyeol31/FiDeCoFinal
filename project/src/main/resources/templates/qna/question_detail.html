@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 상세</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        /* 커스텀 스타일 */
+        header {
+            background-color: #343a40; /* Bootstrap의 bg-dark 색상 */
+            color: #ffffff; /* 흰색 텍스트 */
+        }
+
+        footer {
+            background-color: #343a40; /* Bootstrap의 bg-dark 색상 */
+            color: #f8f9fa; /* Bootstrap의 text-light 색상 */
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .card-text {
+            white-space: pre-line; /* 줄 바꿈 유지 */
+        }
+
+        .badge {
+            background-color: #f8f9fa; /* Bootstrap의 bg-light 색상 */
+            color: #343a40; /* Bootstrap의 text-dark 색상 */
+        }
+
+        .btn-outline-secondary {
+            border-color: #6c757d; /* Bootstrap의 border-secondary 색상 */
+            color: #6c757d; /* Bootstrap의 text-secondary 색상 */
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d; /* Bootstrap의 secondary 색상 */
+            color: #ffffff; /* 흰색 텍스트 */
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-dark text-white py-3">
+        <div th:replace="~{navbar :: nav}"></div>
+    </header>
+    <div class="container my-3">
+        <!-- 질문 -->
+        <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card-text" th:text="${question.content}"></div>
+                <div class="d-flex justify-content-end">
+                    <div th:if="${question.modifyDate != null}" class="badge p-2 text-start mx-3">
+                        <div class="mb-2">수정일자</div>
+                        <div th:text="${#temporals.format(question.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                    <div class="badge p-2 text-start">
+                        <div class="mb-2">작성일자</div>
+                        <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                </div>
+                <div class="my-3">
+                    <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary" th:text="수정"></a>
+                    <a href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}" class="delete btn btn-sm btn-outline-secondary" th:text="삭제"></a>
+                </div>
+            </div>
+        </div>
+        <!-- 답변의 갯수 표시 -->
+        <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+        <!-- 답변 반복 시작 -->
+        <div class="card my-3" th:each="answer : ${question.answerList}">
+            <div class="card-body">
+                <div class="card-text" th:text="${answer.content}"></div>
+                <div class="d-flex justify-content-end">
+                    <div th:if="${answer.modifyDate != null}" class="badge p-2 text-start mx-3">
+                        <div class="mb-2">수정일자</div>
+                        <div th:text="${#temporals.format(answer.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                    <div class="badge p-2 text-start">
+                        <div class="mb-2">작성일자</div>
+                        <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                </div>
+                <div class="my-3">
+                    <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary" th:text="수정"></a>
+                    <a href="javascript:void(0);" th:data-uri="@{|/answer/delete/${answer.id}|}" class="delete btn btn-sm btn-outline-secondary" th:text="삭제"></a>
+                </div>
+            </div>
+        </div>
+        <!-- 답변 반복 끝 -->
+        <!-- 답변 작성 -->
+        <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            </div>
+            <textarea th:field="*{content}" rows="10" class="form-control"></textarea>
+            <input type="submit" value="답변등록" class="btn btn-primary my-2">
+        </form>
+    </div>
+    <footer class="bg-dark text-light py-3">
+        <div class="text-center">
+            <p>(주)FiDeCo</p>
+            <p>주소 서울특별시 구로구 182-13 대룡포스트 2차 2층</p>
+            <p>사업자 번호 123-23-345</p>
+            <p>Copyright © fideco Co, Ltd. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <!-- 삭제 -->
+    <script type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

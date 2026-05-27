@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>제품 목록(관리자)</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+     <style>
+        #filterForm {
+            width: 83.4% !important;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <h2>제품 목록(관리자)</h2>
+    <form id="filterForm" class="form-inline">
+        <label for="productCategory">카테고리 필터:</label>
+        <select id="productCategory" class="form-control mx-2" onchange="applyFilter()">
+            <option value="">전체</option>
+            <option value="1">사무용 / 가정용</option>
+            <option value="2">고성능 / 전문가용</option>
+            <option value="3">3D게임 / 그래픽용</option>
+        </select>
+
+        <label for="priceSort" class="mx-2">가격 정렬:</label>
+        <select id="priceSort" class="form-control mx-2" onchange="applyFilter()">
+            <option value="">선택</option>
+            <option value="asc">낮은 가격순</option>
+            <option value="desc">높은 가격순</option>
+        </select>
+
+        <label for="dateSort" class="mx-2">날짜 정렬:</label>
+        <select id="dateSort" class="form-control mx-2" onchange="applyFilter()">
+            <option value="">선택</option>
+            <option value="asc">오래된순</option>
+            <option value="desc">최신순</option>
+        </select>
+
+        <label for="searchInput" class="mx-2">상품명 검색:</label>
+        <input type="text" id="searchInput" class="form-control mx-2" onkeyup="applyFilter()" placeholder="검색어 입력">
+        
+        <a th:href="@{/products/save}" class="btn btn-success">새 제품 추가</a>
+    </form>
+    <br>
+    <table id="productTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>제품 ID</th>
+                <th>제품명</th>
+                <th>가격</th>
+                <th>등록일</th>
+                <th>제품 카테고리</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.productId}"></td>
+                <td th:text="${product.productName}"></td>
+                <td th:text="${product.productPrice}"></td>
+                <td th:text="${product.productRegisdate}"></td>
+                <td th:text="${product.productCategory}"></td>
+                <td>
+                    <a th:href="@{/products/productDetail/{id}(id=${product.productId})}">상세보기</a>
+                    <a th:href="@{/products/update/{id}(id=${product.productId})}">수정</a>
+                    <a th:href="@{/products/delete/{id}(id=${product.productId})}">삭제</a>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+    <script>
+        function applyFilter() {
+            var filterValue = document.getElementById("productCategory").value;
+            var priceSort = document.getElementById("priceSort").value;
+            var dateSort = document.getElementById("dateSort").value;
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+            var table = document.getElementById("productTable");
+            var tr = table.getElementsByTagName("tr");
+
+            var rowsArray = Array.from(tr).slice(1);
+
+            rowsArray.forEach(function(row) {
+                var tdCategory = row.getElementsByTagName("td")[4];
+                var tdName = row.getElementsByTagName("td")[1];
+                if (tdCategory && tdName) {
+                    var category = tdCategory.textContent || tdCategory.innerText;
+                    var name = tdName.textContent || tdName.innerText;
+                    if ((filterValue === "" || category.includes(filterValue)) && 
+                        (name.toLowerCase().includes(searchInput))) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                }
+            });
+
+            if (priceSort) {
+                rowsArray.sort(function(a, b) {
+                    var priceA = parseInt(a.getElementsByTagName("td")[2].innerText);
+                    var priceB = parseInt(b.getElementsByTagName("td")[2].innerText);
+                    return priceSort === "asc" ? priceA - priceB : priceB - priceA;
+                });
+            }
+
+            if (dateSort) {
+                rowsArray.sort(function(a, b) {
+                    var dateA = new Date(a.getElementsByTagName("td")[3].innerText);
+                    var dateB = new Date(b.getElementsByTagName("td")[3].innerText);
+                    return dateSort === "asc" ? dateA - dateB : dateB - dateA;
+                });
+            }
+
+            rowsArray.forEach(function(row) {
+                table.getElementsByTagName("tbody")[0].appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>

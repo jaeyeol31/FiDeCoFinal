@@ -1,0 +1,31 @@
+
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 생성</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="container mt-4">
+        <h2>주문 생성</h2>
+        <form action="#" th:action="@{/orders/create}" method="post">
+            <div class="form-group">
+                <label for="cartId">카트 ID</label>
+                <input type="text" class="form-control" id="cartId" name="cartId" required>
+            </div>
+            <div class="form-group">
+                <label for="memberId">회원 ID</label>
+                <input type="text" class="form-control" id="memberId" name="memberId" required>
+            </div>
+            <div class="form-group">
+                <label for="orderAmount">주문 금액</label>
+                <input type="number" class="form-control" id="orderAmount" name="orderAmount" required>
+            </div>
+            <button type="submit" class="btn btn-primary">주문 생성</button>
+        </form>
+    </div>
+</body>
+</html>
+ 

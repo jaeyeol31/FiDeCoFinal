@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 입력</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min_4.5.0.css}">
+<style>
+#notice_content {
+	font-size: 1.5rem; /* 내용 입력란 폰트 크기를 크게 설정 */
+	width : 950px; /* 내용 입력란 패딩 설정 */
+	height: 300px; /* 내용 입력란 높이 설정 */
+	resize: vertical; /* 세로 크기 조정 허용 */
+}
+
+#notice_title {
+	width: 350px;
+}
+#file{
+	height : 35px;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<header id="main-header" class="py-2 btn-dark text-white">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<h1>공지사항 입력</h1>
+				</div>
+			</div>
+		</div>
+	</header>
+	<section id="actions" class="py-4 mb-4 bg-light"></section>
+	<section id="details">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h5>공지사항 입력</h5>
+						</div>
+						<div class="card-body">
+							<form method="post" id="sign_notice" th:action="@{/NoticeInsert}"
+								enctype="multipart/form-data">
+								<fieldset>
+									<div class="form-group row">
+										<label for="notice_title" class="ml-sm-3 col-form-label">
+											공지사항 제목 </label>
+										<div class="ml-sm-3">
+											<input type="text" th:name="notice_title" id="notice_title"
+												class="form-control form-control-sm">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="notice_content" class="ml-sm-3 col-form-label">
+											공지사항 내용 </label>
+										<div class="ml-sm-3">
+											<input type="text" th:name="notice_content"
+												id="notice_content" class="form-control form-control-sm">
+										</div>
+									</div>
+
+									<div class="ml-sm-3">
+										<input type="hidden" name="notice_writer" id="notice_writer"
+											class="form-control form-control-sm" value="관리자">
+									</div>
+
+									<div class="form-group row">
+										<label for="file" class="ml-sm-3 col-form-label"> 파일
+											추가하기 </label>
+										<div class="ml-sm-3">
+											<input type="file" th:name="file" id="file"
+												class="form-control form-control-sm">
+										</div>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-secondary">등록</button>
+										<button type="reset" class="btn btn-secondary">
+										<a th:href="@{./NoticeSelect}" style="color: white; text-decoration: none;">취소</a>
+										</button>
+									</div>
+								</fieldset>
+							</form>
+							<div>
+								<a th:href="@{/NoticeSelect}" class="btn btn-primary btn-block">
+									공지사항 목록 </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .quantity-input {
+            width: 80px !important;
+            text-align: center;
+            display: inline-block;
+        }
+        .quantity-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-table {
+            width: 100%;
+        }
+        .total-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .total-price {
+            margin-right: 20px;
+        }
+        .btn-group-custom {
+            display: flex;
+            align-items: center;
+        }
+        .btn-group-custom button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="navbar.html"></div>
+    <div class="container mt-4">
+        <h2>장바구니</h2>
+        <table class="cart-table table table-bordered">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all" /></th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td><input type="checkbox" class="select-item" /></td>
+                    <td th:text="${item.product.productName}">상품명</td>
+                    <td>
+                        <div class="quantity-container">
+                            <input type="number" class="quantity-input form-control" th:value="${item.quantity}" min="1" th:data-item-id="${item.cartItemId}" th:data-price="${item.product.productPrice}">
+                            <button type="button" class="btn btn-primary btn-sm update-quantity-btn" th:data-item-id="${item.cartItemId}">수정</button>
+                        </div>
+                    </td>
+                    <td th:text="${item.product.productPrice}">가격</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total-row">
+            <p class="total-price">합계액: <span id="total-price">0</span>원</p>
+            <div class="btn-group-custom">
+                <button type="button" id="checkout-button" class="btn btn-success">주문하기</button>
+                <button type="button" id="delete-selected-button" class="btn btn-danger">선택한 항목 삭제하기</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAllCheckbox = document.getElementById('select-all');
+            const itemCheckboxes = document.querySelectorAll('.select-item');
+            const totalPriceElement = document.getElementById('total-price');
+            const checkoutButton = document.getElementById('checkout-button');
+
+            function calculateTotalPrice() {
+                let totalPrice = 0;
+                document.querySelectorAll('.quantity-input').forEach(input => {
+                    const quantity = parseInt(input.value);
+                    const price = parseInt(input.getAttribute('data-price'));
+                    totalPrice += quantity * price;
+                });
+                totalPriceElement.textContent = totalPrice.toLocaleString();
+                updateCheckoutButtonState();
+            }
+
+            function updateCheckoutButtonState() {
+                const cartItems = document.querySelectorAll('.quantity-input').length;
+                checkoutButton.disabled = cartItems === 0;
+            }
+
+            selectAllCheckbox.addEventListener('change', function() {
+                itemCheckboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+            });
+
+            document.querySelectorAll('.update-quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const cartItemId = this.getAttribute('data-item-id');
+                    const quantityInput = document.querySelector(`input.quantity-input[data-item-id="${cartItemId}"]`);
+                    if (!quantityInput) {
+                        console.error(`수량 입력 필드를 찾을 수 없습니다. cartItemId: ${cartItemId}`);
+                        return;
+                    }
+                    const quantity = quantityInput.value;
+
+                    fetch('/cart/update', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ cartItemId: cartItemId, quantity: quantity })
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('수량이 업데이트되었습니다.');
+                            calculateTotalPrice(); // 업데이트 후 합계액 다시 계산
+                        } else {
+                            alert('수량 업데이트에 실패했습니다.');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('수량 업데이트 중 오류가 발생했습니다.');
+                    });
+                });
+            });
+
+            document.querySelector('#delete-selected-button').addEventListener('click', function() {
+                const selectedItems = document.querySelectorAll('.select-item:checked');
+                const itemIds = Array.from(selectedItems).map(item => item.closest('tr').querySelector('.update-quantity-btn').getAttribute('data-item-id'));
+
+                if (itemIds.length === 0) {
+                    alert('삭제할 항목을 선택해주세요.');
+                    return;
+                }
+
+                if (!confirm('정말 삭제하시겠습니까?')) {
+                    return;
+                }
+
+                itemIds.forEach(cartItemId => {
+                    fetch(`/cart/delete/${cartItemId}`, {
+                        method: 'DELETE'
+                    }).then(response => {
+                        if (response.ok) {
+                            location.reload(); // 페이지를 새로고침하여 업데이트
+                        } else {
+                            alert('상품 삭제에 실패했습니다.');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('상품 삭제 중 오류가 발생했습니다.');
+                    });
+                });
+            });
+
+            checkoutButton.addEventListener('click', function() {
+                const orderAmount = parseInt(totalPriceElement.textContent.replace(/,/g, ''));
+
+                fetch('/orders/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `orderAmount=${orderAmount}`
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('주문에 실패했습니다.');
+                    }
+                }).then(data => {
+                    alert('주문화면으로 이동합니다.');
+                    window.location.href = `/orders/${data.orderId}`;
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('주문 중 오류가 발생했습니다.');
+                });
+            });
+
+            calculateTotalPrice(); // 페이지 로드 후 합계액 계산
+        });
+    </script>
+</body>
+</html>
